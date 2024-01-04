@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="userSQL">
+
+	<insert id="insert" parameterType="DTO">
+		insert into usertable
+		values(#{name}, #{id}, #{pwd})
+	</insert>
+
+	<select id="getUserList" resultType="DTO">
+		select * from usertable
+	</select>
+	<!-- UserDTO의 필드명과 오라클 컬럼명이 다른 경우 
+	<resultMap type="user" id="userResult">
+		<result column="NAME" property="name" />
+		<result column="ID" property="id" />
+		<result column="PWD" property="pwd" />
+	</resultMap>
+	<select id="getUserList" resultMap="userResult">
+		select * from usertable
+	</select>
+	-->
+	
+	<select id="getUser" parameterType="String" resultType="DTO">
+		select * from usertable where id = #{id}
+	</select>
+	
+	<select id="updateUser" parameterType="DTO">
+		update usertable set name = #{name}, pwd = #{pwd} where id = #{id}
+	</select>
+	
+	<select id="searchUser" parameterType="java.util.Map" resultType="DTO">
+		select * from usertable where ${col_name} like '%'||#{value}||'%' 
+	</select>
+</mapper>
+
+<!-- 
+WHERE 절에서 검색 타입은 ${ } 로 전달하며 키워드는 #{ } 로 전달한다.
+${ } 는 파라미터 값이 그대로 들어가며 #{ } 는 파라미터 값이 ' ' 으로 감싸진다.
+--> 
